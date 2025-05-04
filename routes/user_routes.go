@@ -15,7 +15,7 @@ type UserModule struct {
 
 /* NewUserModule initializes UserModule */
 func NewUserModule() *UserModule {
-	userRepo := repositories.NewUserRepository(database.DB)
+	userRepo := repositories.NewUserRepository(database.GetDB())
 	userService := services.NewUserService(userRepo)
 	userHandler := handlers.NewUserHandler(userService)
 

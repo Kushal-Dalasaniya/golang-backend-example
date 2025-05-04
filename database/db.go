@@ -6,20 +6,14 @@ import (
 	"os"
 
 	"github.com/Kushal-Dalasaniya/golang-backend/entity"
-	"github.com/joho/godotenv"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
 
-var DB *gorm.DB
+var db *gorm.DB
 
 func ConnectDB() {
-	err := godotenv.Load()
-	if err != nil {
-		log.Println("No .env file found")
-	}
-
-	// PostgreSQL connection string
+	/* PostgreSQL connection string */
 	dsn := fmt.Sprintf(
 		"host=%s user=%s password=%s dbname=%s port=%s sslmode=%s",
 		os.Getenv("DB_HOST"),
@@ -32,15 +26,19 @@ func ConnectDB() {
 
 	fmt.Println(dsn)
 
-	// Initialize database
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	/* Initialize database */
+	_db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
 	}
 
-	DB = db
+	db = _db
 	fmt.Println("🚀 Database connected successfully!")
 
-	// Auto-migrate tables
+	/* Auto-migrate tables */
 	db.AutoMigrate(&entity.User{})
+}
+
+func GetDB() *gorm.DB {
+	return db
 }
